@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Case Converter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            margin-top: 50px;
+        }
+        .radio-group {
+            margin-bottom: 20px;
+        }
+        .copy-button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Text Case Converter</h1>
+        <div class="form-group">
+            <label for="inputText">Enter Text:</label>
+            <textarea class="form-control" id="inputText" rows="5" placeholder="Enter your text here..."></textarea>
+        </div>
+        <div class="form-group radio-group">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="textCase" id="uppercase" value="uppercase">
+                <label class="form-check-label" for="uppercase">
+                    Upper Case
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="textCase" id="lowercase" value="lowercase">
+                <label class="form-check-label" for="lowercase">
+                    Lower Case
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="textCase" id="titlecase" value="titlecase">
+                <label class="form-check-label" for="titlecase">
+                    Title Case
+                </label>
+            </div>
+        </div>
+        <button class="btn btn-primary btn-block" id="generateTextButton">Generate Text</button>
+        <div class="form-group mt-3">
+            <label for="outputText">Output Text:</label>
+            <div class="input-group">
+                <textarea class="form-control" id="outputText" rows="5" readonly></textarea>
+                <div class="input-group-append">
+                    <button class="btn btn-secondary copy-button" id="copyTextButton">Copy Text</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap and jQuery JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toTitleCase(str) {
+            return str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+        }
+
+        document.getElementById('generateTextButton').addEventListener('click', function() {
+            const inputText = document.getElementById('inputText').value;
+            const outputTextArea = document.getElementById('outputText');
+            const selectedCase = document.querySelector('input[name="textCase"]:checked');
+
+            if (selectedCase) {
+                let transformedText = '';
+                switch (selectedCase.value) {
+                    case 'uppercase':
+                        transformedText = inputText.toUpperCase();
+                        break;
+                    case 'lowercase':
+                        transformedText = inputText.toLowerCase();
+                        break;
+                    case 'titlecase':
+                        transformedText = inputText.split('\n')
+                                                   .map(line => toTitleCase(line))
+                                                   .join('\n');
+                        break;
+                    default:
+                        transformedText = inputText;
+                }
+                outputTextArea.value = transformedText;
+            } else {
+                alert('Please select a text case option.');
+            }
+        });
+
+        document.getElementById('copyTextButton').addEventListener('click', function() {
+            const outputTextArea = document.getElementById('outputText');
+            outputTextArea.select();
+            document.execCommand('copy');
+            alert('Text copied to clipboard');
+        });
+    </script>
+</body>
+</html>
